@@ -21,24 +21,16 @@ def slopeNonlinear(x1, y1, x2, y2, x3, y3):
     second_difference = first_difference_2 - first_difference_1
 
     a = second_difference/2
-
     b = Symbol('b')
     c = Symbol('c')
-    equation = x1*b - y1 - a*x1**2 - c
-    equation_2 = x2**b - y1 - a*x2**2 - c
-    return equation, equation_2
 
-
-    b, c = fsolve([equation, equation_2], (1, 1))
-    print(b, C)
-
-slopeNonlinear(1, 9, 2, 16, 3, 25)
+    equation = a*x1**2 + b*x1 + c - y1
+    equation_2 = a*x2**2 + b*x2 + c - y2
+    nsolve([equation, equation_2], [b, c], [1, 1])
     
-
-
-
-
-
+    
+slopeNonlinear(1, 9, 2, 16, 3, 25)
+ 
 #Quadratic Sequences:
 # a = 1/2 second differences
 #solve for b and c via substitution 
