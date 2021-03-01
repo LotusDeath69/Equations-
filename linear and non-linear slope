@@ -26,7 +26,7 @@ def slopeNonlinear(x1, y1, x2, y2, x3, y3):
 
     equation = a*x1**2 + b*x1 + c - y1
     equation_2 = a*x2**2 + b*x2 + c - y2
-    nsolve([equation, equation_2], [b, c], [1, 1])
+    print(nsolve([equation, equation_2], [b, c], [1, 1]))
     
     
 slopeNonlinear(1, 9, 2, 16, 3, 25)
