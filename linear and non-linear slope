@@ -1,7 +1,10 @@
 import math
-from sympy import *
 from scipy.optimize import fsolve
 import math
+from sympy import *
+
+def formatDecimal(x):
+    return ('%f' % x).rstrip('0').rstrip('.')
 
 def slopeLinear(x1, y1, x2, y2):
     m = 0
@@ -16,6 +19,10 @@ def slopeLinear(x1, y1, x2, y2):
         print(f'y = {m}x + {Yintercept}')
 
 def slopeNonlinear(x1, y1, x2, y2, x3, y3):
+    #Quadratic Sequences:
+    # a = 1/2 second differences
+    # solve for b and c via substitution
+     
     first_difference_1 = y2 - y1
     first_difference_2 = y3 - y2
     second_difference = first_difference_2 - first_difference_1
@@ -26,12 +33,8 @@ def slopeNonlinear(x1, y1, x2, y2, x3, y3):
 
     equation = a*x1**2 + b*x1 + c - y1
     equation_2 = a*x2**2 + b*x2 + c - y2
-    print(nsolve([equation, equation_2], [b, c], [1, 1]))
-    
-    
-slopeNonlinear(1, 9, 2, 16, 3, 25)
- 
-#Quadratic Sequences:
-# a = 1/2 second differences
-#solve for b and c via substitution 
-
+    [b, c] = nsolve([equation, equation_2], [b, c], [1, 1])
+    if a == 1:
+        print(f'x^2 + {formatDecimal(b)}x + {formatDecimal(c)} = y')
+    else:
+        print(f'{a}x^2 + {formatDecimal(b)}x + {formatDecimal(c)} = y')
