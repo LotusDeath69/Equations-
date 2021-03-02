@@ -1,39 +1,141 @@
-from scipy.optimize import fsolve
-import math
 from sympy import *
 
-def formatDecimal(x):
-    return ('%f' % x).rstrip('0').rstrip('.')
+
+def formatDecimal(x: object) -> object:
+    try:
+        x = ('%f' % x).rstrip('0').rstrip('.')
+        return x
+    except TypeError:
+        return x
+
+
+def formatInt(x: object) -> object:
+    if x == 1:
+        x = ''
+    elif x == -1:
+        x = '-'
+    return x
+
 
 def slopeLinear(x1, y1, x2, y2):
+    Formatting = True
+    Verify = True
+    # Linear Sequences:
+    # Solve for slope via point-slope form
+    # Solve for y-intercept by substistute in x and y values
+
+    '#Preliminaries'
+    if y2 == y1:
+        print(f'Zero Slope; \n'
+              f'y-intercept = {y1}')
+        exit()
+    if x2 == x1:
+        print('Undefined Slope')
+        exit()
+
+    '#Find the slope'
     m = 0
     a = x1 - x2
-    b = y1 - y2 
+    b = y1 - y2
     if a != 0:
-        m = b/a
-    y_intercept = -m*x1 + y1
-    if y_intercept == 0:
-        print(f'y = {formatDecimal(m)}x')
+        m = b / a
+
+    '#Find the y-intercept'
+    y_intercept = -m * x1 + y1
+
+    '#Format and/or print'
+    if Formatting:
+        if y_intercept == 0:
+            print(f'y = {formatDecimal(formatInt(m))}x')
+
+        else:
+            if y_intercept < 0:
+                print(f'y = {formatDecimal(formatInt(m))}x - {formatDecimal(formatInt(y_intercept))}')
+            else:
+                print(f'y = {formatDecimal(formatInt(m))}x + {formatDecimal(formatInt(y_intercept))}')
     else:
-        print(f'y = {formatDecimal(m)}x + {formatDecimal(y_intercept)}')
+        print(f'y = {m}x + {b}')
+
+    '#Verify'
+    if Verify:
+        if y2 == m*x2 + y_intercept:
+            print('Verified')
+        else:
+            print('Cannot Verified')
+
 
 def slopeNonlinear(x1, y1, x2, y2, x3, y3):
-    #Quadratic Sequences:
+    PrintDifferences = False
+    Verify = True
+    Formatting = True
+    # Quadratic Sequences:
     # a = 1/2 second differences
     # solve for b and c via substitution
-     
+
+    '#Check the if the change in x is constant'
+    difference_x = []
+    x_values = [x1, x2, x3]
+    number = len(x_values) - 1
+    for _ in x_values:
+        i = x_values[number] - x_values[number - 1]
+        difference_x.append(i)
+        number -= 1
+
+    if difference_x[0] == difference_x[1]:
+        pass
+    else:
+        print('The rate in which x changes is not consistent \n'
+              'Please try again')
+        exit()
+
+    '#Find the first and second differences in y'
     first_difference_1 = y2 - y1
     first_difference_2 = y3 - y2
+    if first_difference_2 == first_difference_1:
+        print('This is not a Quadratic Sequence \n'
+              'Please try again.')
+        exit()
     second_difference = first_difference_2 - first_difference_1
 
-    a = second_difference/2
+    # Quadratic Function = Ax^2 + bx + c
+    a = second_difference / 2
     b = Symbol('b')
     c = Symbol('c')
 
-    equation = a*x1**2 + b*x1 + c - y1
-    equation_2 = a*x2**2 + b*x2 + c - y2
+    '#Find b and c values by substitution'
+    equation = a * x1 ** 2 + b * x1 + c - y1
+    equation_2 = a * x2 ** 2 + b * x2 + c - y2
     [b, c] = nsolve([equation, equation_2], [b, c], [1, 1])
-    if a == 1:
-        print(f'x^2 + {formatDecimal(b)}x + {formatDecimal(c)} = y')
+
+    '#Verified the equation before formatting it for accuracy purposes'
+
+    '#Format and/or print the equation'
+    if Formatting:
+        operator1 = '+'
+        operator2 = '+'
+        if b < 0:
+            operator1 = '-'
+            b *= -1
+        if c < 0:
+            operator2 = '-'
+            c *= -1
+        elif c == 0:
+            operator2 = ''
+        print(f'{formatDecimal(formatInt(a))}x^2 {operator1} {formatDecimal(formatInt(b))}x {operator2} '
+              f'{formatDecimal(c)} = y')
     else:
-        print(f'{a}x^2 + {formatDecimal(b)}x + {formatDecimal(c)} = y')
+        print(f'{a}x^2 + {b}x + {c} = y')
+
+    '#Print the Second Difference'
+    if PrintDifferences:
+        print(f'Second Difference: {second_difference}')
+
+    '#Print the verified message'
+    if Verify:
+        if a * x3 ** 2 + b * x3 + c == y3:
+            print('Verified')
+        else:
+            print('Cannot be verified')
+
+
+slopeNonlinear(1, -6, 2, -4, 3, 0)
