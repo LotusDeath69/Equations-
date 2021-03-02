@@ -1,0 +1,19 @@
+from sympy import solve, nsolve
+from sympy.abc import x, y
+
+
+def formatDecimal(letter: object) -> object:
+    return ('%f' % letter).rstrip('0').rstrip('.')
+
+
+def formatInt(x: object) -> object:
+    if x == 1:
+        x = ''
+    elif x == -1:
+        x = '-'
+    return x
+
+
+def linearEquation(equation):
+    [answer] = solve(equation)
+    print(formatDecimal(answer))
