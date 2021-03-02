@@ -107,8 +107,6 @@ def slopeNonlinear(x1, y1, x2, y2, x3, y3):
     equation_2 = a * x2 ** 2 + b * x2 + c - y2
     [b, c] = nsolve([equation, equation_2], [b, c], [1, 1])
 
-    '#Verified the equation before formatting it for accuracy purposes'
-
     '#Format and/or print the equation'
     if Formatting:
         operator1 = '+'
@@ -126,16 +124,24 @@ def slopeNonlinear(x1, y1, x2, y2, x3, y3):
     else:
         print(f'{a}x^2 + {b}x + {c} = y')
 
+    '#Print the verified message'
+    if Verify:
+        if Formatting:
+            '#Reitirating a, b, c values because some of them might have been converted into a str'
+            d = Symbol('d')
+            e = Symbol('e')
+            equation = a * x1 ** 2 + d * x1 + e - y1
+            equation_2 = a * x2 ** 2 + d * x2 + e - y2
+            [d, e] = nsolve([equation, equation_2], [d, e], [1, 1])
+            a = second_difference/2
+            if a * x3 ** 2 + d * x3 + e == y3:
+                print('Verified')
+        else:
+            if a * x3 ** 2 + b * x3 + c == y3:
+                print('Verified')
+            else:
+                print('Unable to verified')
+
     '#Print the Second Difference'
     if PrintDifferences:
         print(f'Second Difference: {second_difference}')
-
-    '#Print the verified message'
-    if Verify:
-        if a * x3 ** 2 + b * x3 + c == y3:
-            print('Verified')
-        else:
-            print('Cannot be verified')
-
-
-slopeNonlinear(1, -6, 2, -4, 3, 0)
