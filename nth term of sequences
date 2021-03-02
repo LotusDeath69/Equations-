@@ -17,7 +17,7 @@ def formatInt(x: object) -> object:
     return x
 
 
-def slopeLinear(x1, y1, x2, y2):
+def LinearSequence(x1, y1, x2, y2):
     Formatting = True
     Verify = True
     # Linear Sequences:
@@ -64,7 +64,7 @@ def slopeLinear(x1, y1, x2, y2):
             print('Cannot Verified')
 
 
-def slopeNonlinear(x1, y1, x2, y2, x3, y3):
+def QuadraticSequence(x1, y1, x2, y2, x3, y3):
     PrintDifferences = False
     Verify = True
     Formatting = True
