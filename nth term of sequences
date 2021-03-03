@@ -1,6 +1,47 @@
 from sympy import *
 
 
+def checkConsistency(values, mode):
+    # Find if the change of x is consistent
+    # Mode: 1 = linear; 2 = quadratic; 3 = cubic
+    consistency = True
+    difference_x = []
+    number = len(values) - 1
+    for _ in values:
+        i = values[number] - values[number - 1]
+        difference_x.append(i)
+        number -= 1
+        if number == len(values) - 1:
+            break
+
+    if mode == 1:
+        if difference_x[0] == difference_x[1]:
+            pass
+        else:
+            consistency = False
+
+    if mode == 2:
+        if difference_x[0] == difference_x[1]:
+            pass
+        else:
+            consistency = False
+    if mode == 3:
+        if difference_x[0] == difference_x[1]:
+            if difference_x[2] == difference_x[3]:
+                if difference_x[0] == difference_x[3]:
+                    pass
+                else:
+                    consistency = False
+            else:
+                consistency = False
+        else:
+            consistency = False
+    if consistency is False:
+        print('the change in x is not constant \n'
+              'Please try again!')
+        quit()
+
+
 def formatDecimal(x: object) -> object:
     try:
         x = ('%f' % x).rstrip('0').rstrip('.')
@@ -17,51 +58,64 @@ def formatInt(x: object) -> object:
     return x
 
 
-def Linear(x1, y1, x2, y2):
+def Linear(x1, y1, x2, y2, x3, y3):
     Formatting = True
     Verify = True
-    # Linear Sequences:
-    # Solve for slope via point-slope form
-    # Solve for y-intercept by substistute in x and y values
+    PrintDifference = False
+    # Linear Sequence:
+    # y = a*n + constant
+    # a = first difference between y2 and y1
+    # solve for constant via substitution
+    MODE = 1
 
-    '#Preliminaries'
-    if y2 == y1:
-        print(f'Zero Slope; \n'
-              f'y-intercept = {y1}')
-        quit()
-    if x2 == x1:
-        print('Undefined Slope')
-        quit()
+    "# Check for consistency between the x values"
+    values = [x1, x2, x3]
+    checkConsistency(values, MODE)
 
-    '#Find the slope'
-    m = 0
-    a = x1 - x2
-    b = y1 - y2
-    if a != 0:
-        m = b / a
+    '# Find the rate of change of y values'
+    y_values = [y3, y2, y1]
+    iterator = 0
+    difference = []
+    for _ in y_values:
+        i = y_values[iterator] - y_values[iterator + 1]
+        difference.append(i)
+        iterator += 1
+        if iterator == 2:
+            break
+    if difference[0] != difference[1]:
+        print('Not a linear sequence \n'
+              'Please try again')
 
-    '#Find the y-intercept'
-    y_intercept = -m * x1 + y1
+    '# Find the constant'
+    a = difference[0]
+    constant = -a * x1 + y1
 
-    '#Format and/or print'
+    '# Format and/or print'
     if Formatting:
-        if y_intercept == 0:
-            print(f'y = {formatDecimal(formatInt(m))}x')
-
-        else:
-            if y_intercept < 0:
-                print(f'y = {formatDecimal(formatInt(m))}x - {formatDecimal(formatInt(y_intercept))}')
-            else:
-                print(f'y = {formatDecimal(formatInt(m))}x + {formatDecimal(formatInt(y_intercept))}')
+        print(f'sequence = {formatDecimal(formatInt(a))}n + {formatDecimal(formatInt(constant))}')
     else:
-        print(f'y = {m}x + {b}')
+        print(f'sequence = {a}n + {constant}')
 
-    '#Verify'
+    '# Verifying'
     if Verify:
-        if y2 == m*x2 + y_intercept:
+        y_values = [y3, y2, y1]
+        iterator = 0
+        difference = []
+        for _ in y_values:
+            i = y_values[iterator] - y_values[iterator + 1]
+            difference.append(i)
+            iterator += 1
+            if iterator == 2:
+                break
+        constant = -a * x1 + y1
+        if difference[0] * x3 + constant == y3:
             print('Verified')
         else:
-            print('Cannot Verified')
+            print('Cannot verify')
+
+    '# Print the difference'
+    if PrintDifference:
+        print(f'Difference: {difference[0]}')
 
 
 def Quadratic(x1, y1, x2, y2, x3, y3):
@@ -71,32 +125,24 @@ def Quadratic(x1, y1, x2, y2, x3, y3):
     # Quadratic Sequences:
     # a = 1/2 second differences
     # solve for b and c via substitution
+    MODE = 2
 
     '#Check the if the change in x is constant'
-    difference_x = []
-    x_values = [x1, x2, x3]
-    number = len(x_values) - 1
-    for _ in x_values:
-        i = x_values[number] - x_values[number - 1]
-        difference_x.append(i)
-        number -= 1
-
-    if difference_x[0] == difference_x[1]:
-        pass
-    else:
-        print('The rate in which x changes is not consistent \n'
-              'Please try again')
-        quit()
+    values = [x1, x2, x3]
+    checkConsistency(values, MODE)
 
     '#Find the first and second differences in y'
-    first_difference_1 = y2 - y1
-    first_difference_2 = y3 - y2
-    if first_difference_2 == first_difference_1:
-        print('This is not a Quadratic Sequence \n'
-              'Please try again.')
-        quit()
-    second_difference = first_difference_2 - first_difference_1
-
+    y_values = [y3, y2, y1]
+    iterator = 0
+    first_difference = []
+    for _ in y_values:
+        i = y_values[iterator] - y_values[iterator - 1]
+        first_difference.append(i)
+        iterator += 1
+        if iterator == 2:
+            break
+    second_difference = first_difference[0] - first_difference[1]
+    '#not consistent'
     # Quadratic Function = Ax^2 + bx + c
     a = second_difference / 2
     b = Symbol('b')
@@ -156,22 +202,11 @@ def Cubic(x1, y1, x2, y2, x3, y3, x4, y4, x5, y5):
     # 12a + 2b = the first 2nd difference
     # 7a + 3b + c = u2 - u1 (y2 - y1)
     # a + b + c + d = u1 (y1)
+    MODE = 3
 
     """# Preliminaries:"""
-    difference_x = []
-    x_values = [x1, x2, x3, x4, x5]
-    number = len(x_values) - 1
-    for _ in x_values:
-        i = x_values[number] - x_values[number - 1]
-        difference_x.append(i)
-        number -= 1
-
-    if difference_x[0] == difference_x[1] and difference_x[2] and difference_x[3]:
-        pass
-    else:
-        print('The rate in which x changes is not consistent \n'
-              'Please try again')
-        quit()
+    values = [x1, x2, x3, x4, x5]
+    checkConsistency(values, MODE)
 
     '#Find the first, second, and third difference'
     y_values = [y5, y4, y3, y2, y1]
@@ -233,3 +268,7 @@ def Cubic(x1, y1, x2, y2, x3, y3, x4, y4, x5, y5):
 
     if PrintDifferences:
         print(f'Third Difference: {third_difference[0]}')
+
+
+Cubic(1, 4, 2, 14, 3, 40, 4, 88, 5, 164)
+Quadratic(1, -6, 2, -4, 3, 0)
