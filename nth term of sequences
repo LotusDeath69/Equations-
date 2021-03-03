@@ -17,7 +17,7 @@ def formatInt(x: object) -> object:
     return x
 
 
-def LinearSequence(x1, y1, x2, y2):
+def Linear(x1, y1, x2, y2):
     Formatting = True
     Verify = True
     # Linear Sequences:
@@ -28,10 +28,10 @@ def LinearSequence(x1, y1, x2, y2):
     if y2 == y1:
         print(f'Zero Slope; \n'
               f'y-intercept = {y1}')
-        exit()
+        quit()
     if x2 == x1:
         print('Undefined Slope')
-        exit()
+        quit()
 
     '#Find the slope'
     m = 0
@@ -64,7 +64,7 @@ def LinearSequence(x1, y1, x2, y2):
             print('Cannot Verified')
 
 
-def QuadraticSequence(x1, y1, x2, y2, x3, y3):
+def Quadratic(x1, y1, x2, y2, x3, y3):
     PrintDifferences = False
     Verify = True
     Formatting = True
@@ -86,7 +86,7 @@ def QuadraticSequence(x1, y1, x2, y2, x3, y3):
     else:
         print('The rate in which x changes is not consistent \n'
               'Please try again')
-        exit()
+        quit()
 
     '#Find the first and second differences in y'
     first_difference_1 = y2 - y1
@@ -94,7 +94,7 @@ def QuadraticSequence(x1, y1, x2, y2, x3, y3):
     if first_difference_2 == first_difference_1:
         print('This is not a Quadratic Sequence \n'
               'Please try again.')
-        exit()
+        quit()
     second_difference = first_difference_2 - first_difference_1
 
     # Quadratic Function = Ax^2 + bx + c
@@ -145,3 +145,91 @@ def QuadraticSequence(x1, y1, x2, y2, x3, y3):
     '#Print the Second Difference'
     if PrintDifferences:
         print(f'Second Difference: {second_difference}')
+
+
+def Cubic(x1, y1, x2, y2, x3, y3, x4, y4, x5, y5):
+    PrintDifferences = True
+    Verify = True
+    Formatting = True
+    # Cubic Sequence:
+    # 6a = third difference
+    # 12a + 2b = the first 2nd difference
+    # 7a + 3b + c = u2 - u1 (y2 - y1)
+    # a + b + c + d = u1 (y1)
+
+    """# Preliminaries:"""
+    difference_x = []
+    x_values = [x1, x2, x3, x4, x5]
+    number = len(x_values) - 1
+    for _ in x_values:
+        i = x_values[number] - x_values[number - 1]
+        difference_x.append(i)
+        number -= 1
+
+    if difference_x[0] == difference_x[1] and difference_x[2] and difference_x[3]:
+        pass
+    else:
+        print('The rate in which x changes is not consistent \n'
+              'Please try again')
+        quit()
+
+    '#Find the first, second, and third difference'
+    y_values = [y5, y4, y3, y2, y1]
+    first_difference = []
+    second_difference = []
+    third_difference = []
+    iterator = 0
+    for _ in y_values:
+        i = y_values[iterator] - y_values[iterator + 1]
+        first_difference.append(i)
+        iterator += 1
+        if iterator == 4:
+            iterator = 0
+            for _ in first_difference:
+                i = first_difference[iterator] - first_difference[iterator + 1]
+                second_difference.append(i)
+                iterator += 1
+                if iterator == 3:
+                    iterator = 0
+                    for _ in first_difference:
+                        i = second_difference[iterator] - second_difference[iterator + 1]
+                        third_difference.append(i)
+                        iterator += 1
+                        if iterator == 2:
+                            if third_difference[0] != third_difference[1]:
+                                print('Not a Cubic Sequence \n'
+                                      'Please try again')
+                                quit()
+                            break
+                else:
+                    continue
+                break
+        else:
+            continue
+        break
+
+    '# Find the values of a, b, c, d'
+    a = third_difference[0]/6
+    b = (second_difference[2] - 12 * a) / 2
+    c = (y2 - y1) - 7 * a - 3 * b
+    d = y1 - a - b - c
+
+    '# Format and/or print'
+    if Formatting:
+        print(f'{formatDecimal(formatInt(a))}x^3 + {formatDecimal(formatInt(b))}x^2 + {formatDecimal(formatInt(c))}x +'
+              f' {formatDecimal(formatInt(d))} = y')
+    else:
+        print(f'{a}x^3 + {b}x^2 + {c}x + d = y')
+
+    if Verify:
+        a = third_difference[0] / 6
+        b = (second_difference[2] - 12 * a) / 2
+        c = (y2 - y1) - 7 * a - 3 * b
+        d = y1 - a - b - c
+        if a * x5 ** 3 + b * x5 ** 2 + c * x5 + d == y5:
+            print('Verified')
+        else:
+            print('Cannot verified')
+
+    if PrintDifferences:
+        print(f'Third Difference: {third_difference[0]}')
