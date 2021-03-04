@@ -59,6 +59,3 @@ def slopeLinear(x1, y1, x2, y2):
             print('Verified')
         else:
             print('Cannot Verified')
-
-
-slopeLinear(9, -2, 8, 4)
