@@ -9,21 +9,6 @@ from sympy import *
 x, y = symbols('x y')
 
 
-def slope(x1, y1, x2, y2):
-    m = 0
-    b = (x2 - x1)
-    d = (y2 - y1)
-    if b != 0:
-        m = d/b
-
-    Yintercept = -m * x1 + y1
-
-    print('slope:', m)
-    print('y-intercept:', Yintercept)
-    print('y = {}x + {}'.format(m, Yintercept))
-    return m
-
-
 def DistanceFormula(x1, y1, x2, y2):
     # d = sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
     a = (x2 - x1) ** 2
